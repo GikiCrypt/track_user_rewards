@@ -2,9 +2,9 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait ITrackUserRewards<TContractState>{
-    fn add_points(ref self: TContractState, user: ContractAddress, value: felt252);
-    fn redeem_points(ref self: TContractState, user: ContractAddress, value: felt252);
-    fn get_points(self: @TContractState, user: ContractAddress) -> felt252;
+    fn add_points(ref self: TContractState, account: ContractAddress, value: felt252);
+    fn redeem_points(ref self: TContractState, account: ContractAddress, value: felt252);
+    fn get_points(self: @TContractState, account: ContractAddress) -> felt252;
 }
 
 #[starknet::contract]
@@ -21,18 +21,18 @@ mod TrackUserRewards {
     #[abi(embed_v0)]
     impl TrackUserRewards of ITrackUserRewards<ContractState> {
 
-        fn add_points(ref self: ContractState, user: ContractAddress, value: felt252) {
-            let current = self.user_points.read(user);
-            self.user_points.write(user, current + value)
+        fn add_points(ref self: ContractState, account: ContractAddress, value: felt252) {
+            let current = self.user_points.read(account);
+            self.user_points.write(account, current + value)
         }
 
-        fn redeem_points(ref self: ContractState, user: ContractAddress, value: felt252) {
-            let current = self.user_points.read(user);
-            self.user_points.write(user, current - value);
+        fn redeem_points(ref self: ContractState, account: ContractAddress, value: felt252) {
+            let current = self.user_points.read(account);
+            self.user_points.write(account, current - value);
         }
 
-        fn get_points(self: @ContractState, user: ContractAddress) -> felt252 {
-            self.user_points.read(user)
+        fn get_points(self: @ContractState, account: ContractAddress) -> felt252 {
+            self.user_points.read(account)
         }
     }
 }

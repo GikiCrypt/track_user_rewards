@@ -15,24 +15,24 @@ mod TrackUserRewards {
 
     #[storage]
     struct Storage {
-        user_points: Map<ContractAddress, felt252>,
+        user: Map<ContractAddress, felt252>,
     }
 
     #[abi(embed_v0)]
     impl TrackUserRewards of ITrackUserRewards<ContractState> {
 
         fn add_points(ref self: ContractState, account: ContractAddress, value: felt252) {
-            let current = self.user_points.read(account);
-            self.user_points.write(account, current + value)
+            let current = self.user.read(account);
+            self.user.write(account, current + value)
         }
 
         fn redeem_points(ref self: ContractState, account: ContractAddress, value: felt252) {
-            let current = self.user_points.read(account);
-            self.user_points.write(account, current - value);
+            let current = self.user.read(account);
+            self.user.write(account, current - value);
         }
 
         fn get_points(self: @ContractState, account: ContractAddress) -> felt252 {
-            self.user_points.read(account)
+            self.user.read(account)
         }
     }
 }
